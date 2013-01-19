@@ -1,0 +1,26 @@
+#!/bin/sh
+
+if [ -f "$1" ]; then
+    vim $*
+elif [ -f "$1.rb" ]; then
+    vim $1.rb
+else
+    FNAME=$1
+
+    # avoid filename.rb.rb
+    if [[ $FNAME != *.rb ]]; then
+        FNAME=$FNAME.rb
+    fi
+    echo "[.] creating $FNAME .."
+    if [ -f $FNAME ]; then
+        echo "[?] $FNAME already exists!"
+        exit 1
+    fi
+    echo "#!/usr/bin/env ruby" >> $FNAME
+    echo >> $FNAME
+    echo >> $FNAME
+    chmod +x $FNAME
+
+    # place cursor on last line
+    vim $FNAME +99
+fi
