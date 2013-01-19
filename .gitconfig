@@ -2,6 +2,7 @@
 	user = zed-0xff
 [core]
 	whitespace = -trailing-space
+	excludesfile = ~/.gitignore
 [user]
 	name = Andrey \"Zed\" Zaikin
 	email = zed.0xff@gmail.com
