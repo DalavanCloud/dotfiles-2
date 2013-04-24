@@ -1,0 +1,42 @@
+#!/bin/sh
+ARGS=""
+DO_SYNC=0
+DO_AUTO=0
+
+if [ `whoami` != "root" -a -x /usr/bin/sudo ]; then
+	SUDO_CMD="/usr/bin/sudo"
+else
+	SUDO_CMD=""
+fi
+
+for v in "$@"; do
+	if [ $v = "-s" -o $v = "--sync" ]; then
+		DO_SYNC=1
+	elif [ $v = "-y" -o $v = "--yes" ]; then
+		DO_AUTO=1
+	elif [ $v = "-sy" -o $v = "-ys" ]; then
+		DO_AUTO=1
+		DO_SYNC=1
+	else
+		ARGS="${ARGS} $v"
+	fi
+done
+
+if [ $DO_SYNC -eq 1 ]; then
+	if [ -x /usr/bin/layman ]; then
+		echo "[.] synching layman.."
+		$SUDO_CMD /usr/bin/layman -S
+	fi
+	echo "[.] synching portage.."
+	$SUDO_CMD emerge --sync
+	$SUDO_CMD q -r
+fi
+
+if [ $DO_AUTO -eq 1 ]; then
+	echo "[.] merging automatically.."
+	$SUDO_CMD emerge -Nutv --deep --with-bdeps y --keep-going y $ARGS world 
+else
+	echo "[.] merging interactively.."
+	$SUDO_CMD emerge -Nutva --deep --with-bdeps y --keep-going y $ARGS world 
+fi
+
