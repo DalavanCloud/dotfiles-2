@@ -20,7 +20,8 @@ IGNORES = [
   /\.swp$/i,
   /\.tmp$/i,
   /Rakefile/,
-  /\.git$/      # .git subdir with repo info
+  /\.gitmodules$/, # GIT submodules
+  /\.git$/         # .git subdir with repo info
 ]
 
 task :default => :install
@@ -42,14 +43,34 @@ def ask title, answers, default = nil
   end
 end
 
+# our clone of "git submodule" functionality
+def process_git_dot fname
+  base = File.dirname(fname.relative_path_from(@dotfiles_root))
+  File.readlines(fname).each do |line|
+    uri = line.split('#',2).first.strip
+    next if uri.empty?
+    target_dir = File.join(base, File.basename(uri, ".git"))
+    next if Dir.exist?(target_dir) && Dir.exist?(File.join(target_dir, ".git"))
+    system "git", "clone", uri, File.join(base, File.basename(uri, ".git"))
+  end
+end
+
 def process_dir dir
   #puts "process_dir: #{dir}"
   dir.each_child do |src|
     next if IGNORES.any?{ |re| src.to_s[re] }
+
+    if File.basename(src) == ".git.dot"
+      process_git_dot src
+      next
+    end
+
     target = src.relative_path_from(@dotfiles_root)
     if src.directory?
+      FileUtils.mkdir_p target unless Dir.exist?(target)
       process_dir src
     elsif target.exist?
+      # exists and NOT a dir
       old_data = target.read
       new_data = src.read
       next if old_data == new_data
