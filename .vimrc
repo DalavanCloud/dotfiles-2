@@ -3,6 +3,7 @@ set hlsearch                   " highlight search results
 set history=1000               " search and commands history
 set backspace=indent,eol,start " allow backspacing over everything in insert mode
 set laststatus=2               " show current buffer filename in status line
+set ruler		       " show cursor position
 set hidden                     " keep unsaved data in background buffers
 
 syntax on                      " Enable syntax highlighting
@@ -38,9 +39,10 @@ au BufRead,BufNewFile /etc/nginx/*.conf set ft=nginx
 au BufRead,BufNewFile *.rl set ft=ragel
 au BufRead,BufNewFile *.rb set ft=ruby
 
-au BufWritePre *.rb :%s/\s\+$//e
-au BufWritePre *.erb :%s/\s\+$//e
-au BufWritePre *.rhtml :%s/\s\+$//e
+" strip excess whitespace on save
+"au BufWritePre *.rb :%s/\s\+$//e
+"au BufWritePre *.erb :%s/\s\+$//e
+"au BufWritePre *.rhtml :%s/\s\+$//e
 
 
 "colorscheme vibrantink
