@@ -69,6 +69,7 @@ LANG=en_US.UTF-8
 case `uname` in
     Linux)
 	alias ls="ls --color=auto"
+	alias iptl="iptables -n -v -L"
         ;;
     FreeBSD)
 	LANG=C
