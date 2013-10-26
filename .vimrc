@@ -42,6 +42,8 @@ au BufWritePre *.rb :%s/\s\+$//e
 au BufWritePre *.erb :%s/\s\+$//e
 au BufWritePre *.rhtml :%s/\s\+$//e
 
+" adfox
+au BufRead,BufNewFile ~/adfox/sourc*.cc set ts=4 expandtab
 
 "colorscheme vibrantink
 "set nu
