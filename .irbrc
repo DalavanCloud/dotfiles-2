@@ -1,3 +1,4 @@
+require 'irb/completion'
 require 'rubygems'
 require 'what_methods'
 require 'ap'
