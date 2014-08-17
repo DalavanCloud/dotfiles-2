@@ -142,6 +142,9 @@ set tags=.tags,./tags,./.tags,../.tags,../../.tags,../../../.tags
 
 au FileType yaml set tabstop=2 shiftwidth=2 expandtab
 
+""""""""""""""""""""""""""""""""""""""""""""""""
+" comments
+
 " , #perl # comments
 map ,# :s/^/#/<CR><Esc>:nohlsearch<CR>
 
@@ -154,7 +157,21 @@ map ,< :s/^\(.*\)$//<CR><Esc>:nohlsearch<CR>
 " c++ java style comments
 map ,* :s/^\(.*\)$/\/\* \1 \*\//<CR><Esc>:nohlsearch<CR>
 
+" LUA style comments
+map ,- :s/^/--/<CR><Esc>:nohlsearch<CR>
+
 " uncomment
 map ,u :s/^#//<CR><Esc>:nohlsearch<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""
+" paste
+
+" paste w/o 'set paste' // from http://www.linux.org.ru/forum/web-development/10662433
+let &t_SI .= "\<Esc>[?2004h"
+let &t_EI .= "\<Esc>[?2004l"
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+function! XTermPasteBegin()
+  set pastetoggle=<Esc>[201~
+  set paste
+  return ""
+endfunction
