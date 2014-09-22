@@ -1,4 +1,6 @@
 .DS_Store
+.api_history
 *.tmp
 *.swp
 *.swo
+tags

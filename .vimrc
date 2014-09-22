@@ -5,6 +5,7 @@ set backspace=indent,eol,start " allow backspacing over everything in insert mod
 set laststatus=2               " show current buffer filename in status line
 set ruler		       " show cursor position
 set hidden                     " keep unsaved data in background buffers
+set textwidth=0                " disable auto wrap
 
 syntax on                      " Enable syntax highlighting
 filetype on                    " Enable filetype detection
@@ -19,6 +20,10 @@ execute pathogen#infect()
 
 " BufExplorer on Ctrl+B
 map <C-b> :BufExplorer<cr>
+
+nmap o <C-o>
+"nmap ] <C-]>
+"nmap [ <C-o>
 
 " When editing a file, always jump to the last cursor position
 autocmd BufReadPost *
@@ -38,6 +43,7 @@ au FileType ruby,eruby set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 au BufRead,BufNewFile /etc/nginx/*.conf set ft=nginx 
 au BufRead,BufNewFile *.rl set ft=ragel
 au BufRead,BufNewFile *.rb set ft=ruby
+au BufRead,BufNewFile *.txt set textwidth=0
 
 " strip excess whitespace on save
 "au BufWritePre *.rb :%s/\s\+$//e
@@ -45,7 +51,8 @@ au BufRead,BufNewFile *.rb set ft=ruby
 "au BufWritePre *.rhtml :%s/\s\+$//e
 
 " adfox
-au BufRead,BufNewFile ~/adfox/sourc*.cc set ts=4 expandtab
+au BufRead,BufNewFile ~/adfox/sourc*/* set ts=4 sw=4 expandtab tags=tags,../tags cino={1s(4
+au BufRead,BufNewFile *.pp set ts=4 sw=4 expandtab
 
 "colorscheme vibrantink
 "set nu
@@ -54,8 +61,8 @@ au BufRead,BufNewFile ~/adfox/sourc*.cc set ts=4 expandtab
 let g:fuzzy_ignore = "gems/*"
 
 map <C-p> :s/^[a-zA-Z].*/<p>\0<\/p><CR>
-map <C-h>3 :s/^[a-zA-Z].*/<h3>\0<\/h3><CR>
-map <C-h>4 :s/^[a-zA-Z].*/<h4>\0<\/h4><CR>
+"map <C-h>3 :s/^[a-zA-Z].*/<h3>\0<\/h3><CR>
+"map <C-h>4 :s/^[a-zA-Z].*/<h4>\0<\/h4><CR>
 
 set nolist
 set wrap
@@ -175,3 +182,39 @@ function! XTermPasteBegin()
   set paste
   return ""
 endfunction
+
+" toggle between cpp/h
+nmap <C-h> :call ToggleFile()<CR>
+function! ToggleFile()
+ruby <<EOF
+  extensions = %w'h hpp c cc cpp inc'
+  #cur_fname = VIM::Buffer.current.name
+  cur_fname = VIM::evaluate("@%")
+  cur_ext   = File.extname(cur_fname).to_s.tr('.','')
+  cur_bname = cur_fname.sub(/#{Regexp::escape(cur_ext)}$/,'')
+  if idx = extensions.index(cur_ext)
+    # found current extension in array
+    (idx+1).times do
+      extensions.push(extensions.shift)
+    end
+  end
+  extensions.each do |ext|
+    fname = cur_bname + ext
+    if File.exist?(fname)
+      VIM.command("e #{fname}")
+      break
+    end
+  end
+EOF
+endfunction
+
+" show current function name when 'f' pressed
+fun! ShowFuncName()
+  let lnum = line(".")
+  let col = col(".")
+  echohl ModeMsg
+  echo getline(search("^[^ \t#/]\\{2}.*[^:]\s*$", 'bW'))
+  echohl None
+  call search("\\%" . lnum . "l" . "\\%" . col . "c")
+endfun
+map f :call ShowFuncName() <CR>

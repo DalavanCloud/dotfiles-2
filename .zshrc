@@ -24,10 +24,12 @@ else
 	done
 	PR_NOCOLOR="%{$terminfo[sgr0]%}"
 
-	if [[ `whoami` == root ]]; then
+	if [[ "$USER" == "root" ]]; then
 		PR_COLOR=$PR_RED
-	else
+	elif [[ -f "$HOME/.zgreen" ]]; then
 		PR_COLOR=$PR_LIGHT_GREEN
+	else
+		PR_COLOR=$PR_YELLOW
 	fi
 fi
 case $TERM in
@@ -40,8 +42,8 @@ esac
 PROMPT="${PR_COLOR}[%n@%m %c]#${PR_NOCOLOR}"
 #PROMPT="${PR_COLOR}[%n@mac %c]#${PR_NOCOLOR}"
 HISTFILE=~/.zhistory
-SAVEHIST=512
-HISTSIZE=512
+HISTSIZE=5120
+SAVEHIST=$HISTSIZE
 DIRSTACKSIZE=20
 
 setopt  APPEND_HISTORY
@@ -70,6 +72,7 @@ case `uname` in
     Linux)
 	alias ls="ls --color=auto"
 	alias iptl="iptables -n -v -L"
+	export LESS="-R -M --shift 5"
         ;;
     FreeBSD)
 	LANG=C
@@ -103,10 +106,17 @@ alias tmf="tail -f /var/log/messages"
 # strip ANSI escapes
 alias stresc='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"'
 
+# openvz
+alias vzl="vzlist -ao ctid,status,name,ip | sed 's/^.*running.*$/\x1b[32m\0\x1b(B\x1b[m/'"
+alias vzl2="vzlist -ao ctid,status,name,hostname | sed 's/^.*running.*$/\x1b[32m\0\x1b(B\x1b[m/'"
+alias vzenter="vzctl enter"
+
+alias spec=rspec
+
 ###############################################################################
 
-export PATH="${HOME}/bin:/usr/local/bin:${PATH}:$HOME/android/sdk/tools:$HOME/android/sdk/platform-tools"
-export PATH="${PATH}:/opt/local/bin"
+export PATH="${HOME}/bin:/usr/local/bin:${PATH}:/usr/sbin:$HOME/android/sdk/tools:$HOME/android/sdk/platform-tools"
+export PATH="${PATH}:/opt/local/bin:${HOME}/.gem/ruby/2.0.0/bin"
 
 # https://gist.github.com/4136373
 export RUBY_GC_MALLOC_LIMIT=60000000
@@ -115,3 +125,5 @@ export RUBY_FREE_MIN=200000
 [[ -s "$HOME/.ec2/keys.sh" ]] && . "$HOME/.ec2/keys.sh" 
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+GREP_OPTIONS="--exclude-dir .git"
