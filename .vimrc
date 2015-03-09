@@ -44,6 +44,8 @@ au BufRead,BufNewFile /etc/nginx/*.conf set ft=nginx
 au BufRead,BufNewFile *.rl set ft=ragel
 au BufRead,BufNewFile *.rb set ft=ruby
 au BufRead,BufNewFile *.txt set textwidth=0
+au BufRead,BufNewFile *.pp set ft=ruby                      " puppet
+au BufRead,BufNewFile Capfile set ft=ruby                   " capistrano
 
 " strip excess whitespace on save
 "au BufWritePre *.rb :%s/\s\+$//e
@@ -52,7 +54,8 @@ au BufRead,BufNewFile *.txt set textwidth=0
 
 " adfox
 au BufRead,BufNewFile ~/adfox/sourc*/* set ts=4 sw=4 expandtab tags=tags,../tags cino={1s(4
-au BufRead,BufNewFile *.pp set ts=4 sw=4 expandtab
+au BufRead,BufNewFile ~/sourc*/*       set ts=4 sw=4 expandtab tags=tags,../tags cino={1s(4
+au BufRead,BufNewFile *.pp             set ts=4 sw=4 expandtab
 
 "colorscheme vibrantink
 "set nu
@@ -174,9 +177,9 @@ map ,u :s/^#//<CR><Esc>:nohlsearch<CR>
 " paste
 
 " paste w/o 'set paste' // from http://www.linux.org.ru/forum/web-development/10662433
-let &t_SI .= "\<Esc>[?2004h"
-let &t_EI .= "\<Esc>[?2004l"
-inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+"let &t_SI .= "\<Esc>[?2004h"
+"let &t_EI .= "\<Esc>[?2004l"
+"inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 function! XTermPasteBegin()
   set pastetoggle=<Esc>[201~
   set paste
