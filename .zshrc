@@ -120,7 +120,7 @@ alias m="mosh -6 -A"
 
 ###############################################################################
 
-export PATH="${HOME}/bin:/usr/local/bin:${PATH}:/usr/sbin:$HOME/android/sdk/tools:$HOME/android/sdk/platform-tools"
+export PATH="${HOME}/bin:/usr/local/bin:${PATH}:/usr/sbin:/usr/local/sbin:$HOME/android/sdk/tools:$HOME/android/sdk/platform-tools"
 export PATH="${PATH}:/opt/local/bin:${HOME}/.gem/ruby/2.0.0/bin"
 
 # https://gist.github.com/4136373

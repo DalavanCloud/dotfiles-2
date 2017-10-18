@@ -42,10 +42,10 @@ set langmap=йq,цw,уe,кr,еt,нy,гu,шi,щo,зp,х[,ъ],фa,ыs,вd,аf,пg,
 au FileType ruby,eruby set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 au BufRead,BufNewFile /etc/nginx/*.conf set ft=nginx 
 au BufRead,BufNewFile *.rl set ft=ragel
-au BufRead,BufNewFile *.rb set ft=ruby
 au BufRead,BufNewFile *.txt set textwidth=0
 au BufRead,BufNewFile *.pp set ft=ruby                      " puppet
 au BufRead,BufNewFile Capfile set ft=ruby                   " capistrano
+au BufRead,BufNewFile *.py set sw=4 ts=4 expandtab
 
 " strip excess whitespace on save
 "au BufWritePre *.rb :%s/\s\+$//e
@@ -53,9 +53,14 @@ au BufRead,BufNewFile Capfile set ft=ruby                   " capistrano
 "au BufWritePre *.rhtml :%s/\s\+$//e
 
 " adfox
-au BufRead,BufNewFile ~/adfox/sourc*/* set ts=4 sw=4 expandtab tags=tags,../tags cino={1s(4
-au BufRead,BufNewFile ~/sourc*/*       set ts=4 sw=4 expandtab tags=tags,../tags cino={1s(4
+au BufRead,BufNewFile ~/adfox/sourc*/* set ts=4 sw=4 expandtab tags=tags,../tags cino=f1s{1s(4
+au BufRead,BufNewFile ~/sourc*/*       set ts=4 sw=4 expandtab tags=tags,../tags cino=f1s{1s(4
+au BufRead,BufNewFile *.cc,*.cpp       set ts=4 sw=4 expandtab tags=tags,../tags cino=f1s{1s(4
 au BufRead,BufNewFile *.pp             set ts=4 sw=4 expandtab
+au BufRead,BufNewFile *.conf           set ts=4 sw=4 expandtab
+au BufRead,BufNewFile *.rb set ft=ruby ts=2 sw=2 expandtab
+au BufRead,BufNewFile *.lua set ts=4 sw=4 expandtab
+au BufRead,BufNewFile *Dockerfile*     set ts=4 sw=4 expandtab
 
 "colorscheme vibrantink
 "set nu
