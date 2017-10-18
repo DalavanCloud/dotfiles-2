@@ -111,4 +111,7 @@ task :install do
   error! "[!] relative path guess FAIL" if data != File.read(File.join(@dotfiles_root.to_s,File.basename(__FILE__)))
 
   process_dir @dotfiles_root
+
+  system "git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim"
+  system "vim +PluginInstall +qall"
 end
