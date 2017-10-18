@@ -1,4 +1,20 @@
 set nocompatible               " Use Vim settings, rather then Vi settings (much better!)
+filetype off                   " required for Vundle
+
+" Vundle init begin https://github.com/VundleVim/Vundle.vim
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'  " let Vundle manage Vundle, required
+Plugin 'jlanzarotta/bufexplorer'
+Plugin 'godlygeek/tabular'
+Plugin 'tpope/vim-endwise'
+Plugin 'dareg/vim-cpp'
+"Plugin 'chase/vim-ansible-yaml'
+Plugin 'avakhov/vim-yaml'
+call vundle#end()              " required
+filetype plugin indent on      " required
+" Vundle init end
+
 set hlsearch                   " highlight search results
 set history=1000               " search and commands history
 set backspace=indent,eol,start " allow backspacing over everything in insert mode
@@ -15,11 +31,12 @@ compiler ruby                  " Enable compiler support for ruby
 
 hi Search cterm=NONE ctermfg=black ctermbg=yellow
 
-"allow each plugin to live in ~/.vim/bundle/<plugin>
-execute pathogen#infect()
-
 " BufExplorer on Ctrl+B
 map <C-b> :BufExplorer<cr>
+
+" prev/next buf on Ctrl+up/down
+nnoremap <silent> <C-Up>   :bp<CR>
+nnoremap <silent> <C-Down> :bn<CR>
 
 nmap o <C-o>
 "nmap ] <C-]>
@@ -34,7 +51,7 @@ autocmd BufReadPost *
 \ endif
 
 " allow commands input in russian
-set langmap=йq,цw,уe,кr,еt,нy,гu,шi,щo,зp,х[,ъ],фa,ыs,вd,аf,пg,рh,оj,лk,дl,ж\\;,э',яz,чx,сc,мv,иb,тn,ьm,б\\,,ю.,ё`,ЙQ,ЦW,УE,КR,ЕT,НY,ГU,ШI,ЩO,ЗP,Х{,Ъ},ФA,ЫS,ВD,АF,ПG,РH,ОJ,ЛK,ДL,Ж:,Э\\",ЯZ,ЧX,СC,МV,ИB,ТN,ЬM,Б<,Ю>,Ё~
+"set langmap=йq,цw,уe,кr,еt,нy,гu,шi,щo,зp,х[,ъ],фa,ыs,вd,аf,пg,рh,оj,лk,дl,ж\\;,э',яz,чx,сc,мv,иb,тn,ьm,б\\,,ю.,ё`,ЙQ,ЦW,УE,КR,ЕT,НY,ГU,ШI,ЩO,ЗP,Х{,Ъ},ФA,ЫS,ВD,АF,ПG,РH,ОJ,ЛK,ДL,Ж:,Э\\",ЯZ,ЧX,СC,МV,ИB,ТN,ЬM,Б<,Ю>,Ё~
 
 " ======================== OLD ==========================
 
@@ -42,6 +59,7 @@ set langmap=йq,цw,уe,кr,еt,нy,гu,шi,щo,зp,х[,ъ],фa,ыs,вd,аf,пg,
 au FileType ruby,eruby set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 au BufRead,BufNewFile /etc/nginx/*.conf set ft=nginx 
 au BufRead,BufNewFile *.rl set ft=ragel
+au BufRead,BufNewFile *.rb set ts=2 sw=2 expandtab
 au BufRead,BufNewFile *.txt set textwidth=0
 au BufRead,BufNewFile *.pp set ft=ruby                      " puppet
 au BufRead,BufNewFile Capfile set ft=ruby                   " capistrano
@@ -53,15 +71,22 @@ au BufRead,BufNewFile *.py set sw=4 ts=4 expandtab
 "au BufWritePre *.rhtml :%s/\s\+$//e
 
 " adfox
-au BufRead,BufNewFile ~/adfox/sourc*/* set ts=4 sw=4 expandtab tags=tags,../tags cino=f1s{1s(4
-au BufRead,BufNewFile ~/sourc*/*       set ts=4 sw=4 expandtab tags=tags,../tags cino=f1s{1s(4
-au BufRead,BufNewFile *.cc,*.cpp       set ts=4 sw=4 expandtab tags=tags,../tags cino=f1s{1s(4
-au BufRead,BufNewFile *.pp             set ts=4 sw=4 expandtab
-au BufRead,BufNewFile *.conf           set ts=4 sw=4 expandtab
-au BufRead,BufNewFile *.rb set ft=ruby ts=2 sw=2 expandtab
-au BufRead,BufNewFile *.lua set ts=4 sw=4 expandtab
+au BufRead,BufNewFile *.cpp,*.hpp,*.h,*.inc,*.cc,*.cmake,CMakeLists.txt set ts=4 sw=4 expandtab tags=tags,../tags cino=N-sf1s{1s(4i8h0
+au BufRead,BufNewFile ~/adfox/sourc*/*.lua set ts=4 sw=4 expandtab
+au BufRead,BufNewFile ~/adfox/sourc*/*.inc set filetype=cpp indentexpr=
+au BufRead,BufNewFile *.cql set syntax=sql ts=4 sw=4 expandtab
+au BufRead,BufNewFile *.pp  set ts=4 sw=4 expandtab
+au BufRead,BufNewFile *.php set ts=4 sw=4 expandtab
+au BufRead,BufNewFile *.go  set ts=4 sw=4 expandtab syntax=c
 au BufRead,BufNewFile *Dockerfile*     set ts=4 sw=4 expandtab
 
+"au BufRead,BufNewFile ~/adfox/sourc*/* set ts=4 sw=4 expandtab tags=tags,../tags cino=f1s{1s(4
+"au BufRead,BufNewFile ~/sourc*/*       set ts=4 sw=4 expandtab tags=tags,../tags cino=f1s{1s(4
+"au BufRead,BufNewFile *.cc,*.cpp       set ts=4 sw=4 expandtab tags=tags,../tags cino=f1s{1s(4
+"au BufRead,BufNewFile *.conf           set ts=4 sw=4 expandtab
+"au BufRead,BufNewFile *.rb set ft=ruby ts=2 sw=2 expandtab
+
+colorscheme torte
 "colorscheme vibrantink
 "set nu
 "set sts=2
@@ -206,11 +231,20 @@ ruby <<EOF
       extensions.push(extensions.shift)
     end
   end
+  found = false
   extensions.each do |ext|
     fname = cur_bname + ext
     if File.exist?(fname)
       VIM.command("e #{fname}")
+      found = true
       break
+    end
+  end
+  # atlas
+  if !found && cur_fname =~ /\.yml$/ && File.dirname(cur_fname) =~ /atlas.in$/
+    fname = cur_fname.sub("atlas.in/", "atlas.out/").sub(".yml",".auto.hpp")
+    if File.exist?(fname)
+      VIM.command("e #{fname}")
     end
   end
 EOF
